@@ -88,7 +88,7 @@ class ImageGroupHDF5Tests {
         assert json instanceof JSONObject
     }
 
-    void testShowImageGroupFromImageGroupId(){
+    void testShowImageGroupHDF5FromImageGroupId(){
         ImageGroup imageGroup = BasicInstanceBuilder.getImageGroup()
         ImageGroupHDF5 imageGroupHDF5 = BasicInstanceBuilder.getImageGroupHDF5NotExist(false)
         imageGroupHDF5.group = imageGroup
