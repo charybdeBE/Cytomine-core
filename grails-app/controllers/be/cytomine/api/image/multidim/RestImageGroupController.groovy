@@ -211,4 +211,31 @@ class RestImageGroupController extends RestController {
             responseNotFound("ImageGroup", params.id)
         }
     }
+
+    def recth5(){
+        ImageGroup image = imageGroupService.read(params.long('id'))
+        if (image) {
+            ImageGroupHDF5 imageh5 = imageGroupHDF5Service.getByGroup(image)
+            if(imageh5){
+                ImageSequence is = ImageSequence.findByImageGroup(image)
+                def y = is.image.baseImage.height - Integer.parseInt(params.y)
+
+                String fn = imageh5.filenames
+                String url = "/multidim/rectangle.json?fif=$fn&x=$params.x&y=$y&w=$params.w&h=$params.h"
+
+                String imageServerURL =  grailsApplication.config.grails.imageServerURL[0]
+                log.info "$imageServerURL"+url
+                String resp = new URL("$imageServerURL"+url).getText()
+
+                def jsonSlurper = new JsonSlurper()
+                def or = jsonSlurper.parseText(resp)
+                responseSuccess(or)
+
+            }
+            else
+                responseNotFound("ImageGroupHDF5", params.id)
+        } else {
+            responseNotFound("ImageGroup", params.id)
+        }
+    }
 }
